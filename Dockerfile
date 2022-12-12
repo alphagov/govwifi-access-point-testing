@@ -18,7 +18,7 @@ RUN echo "[NetDev]\nName=br0\nKind=bridge\n" > /etc/systemd/network/bridge-br0.n
 RUN echo "[Match]\nName=eth0\n[Network]\nBridge=br0\n"
 
 # sudo systemctl enable systemd-networkd
-RUN systemctl start systemd-networkd
+# RUN systemctl start systemd-networkd
 
 RUN echo 'denyinterfaces wlan0 eth0' | cat - /etc/dhcpcd.conf > temp && mv temp /etc/dhcpcd.conf
 
