@@ -1,7 +1,8 @@
 FROM ubuntu:latest
 
 RUN apt-get update && \
-	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends systemctl hostapd && \
+	DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends rfkill systemctl python3 \
+    iptables isc-dhcp-server iproute2 iw python3-pip hostapd && \
 	systemctl unmask hostapd && \
 	systemctl enable hostapd && \
 	apt-get clean && \
@@ -11,36 +12,13 @@ RUN apt-get update && \
 ENV TZ=Europe/London
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-RUN mkdir -p /etc/systemd/network
+ENV INTERFACE = ""
+ENV SUBNET="192.168.0.0"
 
-RUN echo "[NetDev]\nName=br0\nKind=bridge\n" > /etc/systemd/network/bridge-br0.netdev
+COPY ip_tables.sh /usr/bin
+RUN chmod 775 /usr/bin/ip_tables.sh
+COPY start.sh /usr/bin
+RUN chmod 775 /usr/bin/start.sh
+COPY dhcpd.leases /var/lib/dhcp/
 
-RUN echo "[Match]\nName=eth0\n[Network]\nBridge=br0\n"
-
-# sudo systemctl enable systemd-networkd
-# RUN systemctl start systemd-networkd
-
-RUN echo 'denyinterfaces wlan0 eth0' | cat - /etc/dhcpcd.conf > temp && mv temp /etc/dhcpcd.conf
-
-RUN echo "interface br0" >> /etc/dhcpcd.conf
-
-RUN rfkill unblock wlan
-
-RUN echo \
-"country_code=GB\n \
-interface=wlan0\n \
-bridge=br0\n \
-ssid=FREERADIUS_TESTING\n \
-hw_mode=g\n \
-channel=7\n \
-macaddr_acl=0\n \
-ieee8021x=1\n \
-nas_name=dockernet\n \
-auth_server_addr=192.168.0.47\n \
-auth_server_port=1812\n \
-auth_server_shared_secret=testing123\n \
-acct_server_addr=192.168.0.47\n \
-acct_server_port=1813\n \
-acct_server_shared_secret=testing123\n\n" \
->> /etc/hostapd/hostapd.conf
-
+CMD ["/usr/bin/start.sh"]
