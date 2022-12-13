@@ -1,0 +1,29 @@
+---
+configuration-url: 'https://example.com/path_to_shared_config.yml'  # Optional
+
+
+host-machine:
+  hostname: jndellxububtu
+
+
+usb-devices:
+
+  microphone:
+    id: '0846:9001'
+    action: 'add only'
+
+
+virtual-machines:
+  # Connect on port 7101, IP address will be determined based on machine.
+  # Current virtual machine can be automatically set by including its hostname.
+  ubuntu-ap:
+    monitor: ':7101'
+    hostname: 'ubuntu-ap'
+
+  # Connect using an IP address on port 7101.
+  # windows-vm-2:
+  #   monitor: '192.168.1.5:7101'
+
+  # Connect using the host's hostname on port 7103.
+  # windows-vm-2:
+  #   monitor: 'pc:7103'
