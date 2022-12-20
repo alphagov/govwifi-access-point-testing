@@ -1,0 +1,23 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_GB
+  keyboard:
+    layout: gb
+  ssh:
+    install-server: true
+    allow-pw: true
+  user-data:
+    preserve_hostname: false
+    hostname: ubuntu-ap
+    package_upgrade: true
+    timezone: Europe/London
+    chpasswd:
+      expire: false
+    users:
+      - name: ap
+        passwd: $6$xyz$ShNnbwk5fmsyVIlzOf8zEg4YdEH2aWRSuY4rJHbzLZRlWcoXbxxoI0hfn0mdXiJCdBJ/lTpKjk.vu5NZOv0UM0 # password is 'password'
+        groups: [adm, cdrom, dip, plugdev, lxd, sudo]
+        lock-passwd: false
+        sudo: ALL=(ALL) NOPASSWD:ALL
+        shell: /bin/bash
