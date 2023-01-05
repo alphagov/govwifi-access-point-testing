@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AP_INTERFACE=wlan0
-LAN_INTERFACE=$LAN_INTERFACE
+LAN_INTERFACE=eth0
 SSID=FREERADIUS_TESTING
 
 apt-get update
@@ -40,8 +40,10 @@ auth_server_shared_secret=testing123
 EOF
 
 cat > "/etc/dhcp/dhcpd.conf"<<EOF
-denyinterfaces wlan0 $LAN_INTERFACE
+denyinterfaces $AP_INTERFACE $LAN_INTERFACE
 interface br0
 EOF
+
+echo "\ncountry=GB\n" >> "/etc/wpa_supplicant/wpa_supplicant.conf"
 
 rfkill unblock wlan
