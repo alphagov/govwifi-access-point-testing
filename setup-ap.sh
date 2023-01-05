@@ -1,5 +1,9 @@
 #!/bin/bash
 
+AP_INTERFACE=wlan0
+LAN_INTERFACE=$LAN_INTERFACE
+SSID=FREERADIUS_TESTING
+
 apt-get update
 apt-get install hostapd
 systemctl unmask hostapd
@@ -11,9 +15,9 @@ Name=br0
 Kind=bridge
 EOF
 
-cat "/etc/systemd/network/br0-member-eth0.network"<<EOF
+cat > "/etc/systemd/network/br0-member-$LAN_INTERFACE.network"<<EOF
 [Match]
-Name=eth0
+Name=$LAN_INTERFACE
 [Network]
 Bridge=br0
 EOF
@@ -22,9 +26,9 @@ systemctl enable systemd-networkd
 
 cat > "/etc/hostapd/hostapd.conf"<<EOF
 country_code=GB
-interface=wlan0
+interface=$AP_INTERFACE
 bridge=br0
-ssid=FREERADIUS_TESTING
+ssid=$SSID
 hw_mode=g
 channel=7
 macaddr_acl=0
@@ -36,7 +40,7 @@ auth_server_shared_secret=testing123
 EOF
 
 cat > "/etc/dhcp/dhcpd.conf"<<EOF
-denyinterfaces wlan0 eth0
+denyinterfaces wlan0 $LAN_INTERFACE
 interface br0
 EOF
 
