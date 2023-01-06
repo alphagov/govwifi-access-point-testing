@@ -44,10 +44,10 @@ auth_server_port=1812
 auth_server_shared_secret=testing123
 EOF
 
-cat > "/etc/dhcp/dhcpd.conf"<<EOF
-denyinterfaces $AP_INTERFACE $LAN_INTERFACE
-interface br0
-EOF
+
+sed -i "1s/^/denyinterfaces $AP_INTERFACE $LAN_INTERFACE\n/" /etc/dhcpcd.conf
+
+echo "\ninterface br0" >> /etc/dhcpcd.conf
 
 echo "\ncountry=GB\n" >> "/etc/wpa_supplicant/wpa_supplicant.conf"
 
