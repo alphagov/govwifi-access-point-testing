@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$FREERADIUS_IP" ]; then
+    echo "You must set a value for the FREERADIUS_IP environment variable before running this script."
+    exit 0
+fi
+
 AP_INTERFACE=wlan0
 LAN_INTERFACE=eth0
 SSID=FREERADIUS_TESTING
@@ -34,7 +39,7 @@ channel=7
 macaddr_acl=0
 ieee8021x=1
 # nas_name=dockernet
-auth_server_addr=127.0.0.1
+auth_server_addr=$FREERADIUS_IP
 auth_server_port=1812
 auth_server_shared_secret=testing123
 EOF
