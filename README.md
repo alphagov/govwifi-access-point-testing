@@ -24,7 +24,7 @@ Choose the 'Lite' image, without desktop environment or other tools.
 
 ### Other devices
 
-This method of setting up an access point should work with any Debian-based machine with both a wifi adapter and ethernet adapter. 
+This method of setting up an access point should work with any Debian-based machine with both a wifi adapter and ethernet adapter.
 
 Either follow the instructions below from 'Setting up the access point' onwards or run the setup script on an existing Debian etc machine. Some small changes to the script/instructions will be needed to correctly set the names of the network adapters.
 
@@ -95,13 +95,15 @@ If you're using MacOS and it complains about the bs=4M option, try:
 sudo dd if=./2021-05-07-raspios-buster-armhf-lite.img of=/dev/sdf bs=4m
 ```
 
-#### Enabling ssh
+#### Creating a user and enabling ssh
 
 When dd has finished running the newly flashed SD card should have it's boot partition mounted automatically. Assuming this is at /media/username/boot, run the following (replacing 'username' with your username):
 
 ```
 touch /media/username/boot/ssh
 ```
+
+Copy the `userconf` file into the boot partition. This will automatically create a user called 'ap' with the password 'password'.
 
 #### Raspberry Pi hardware setup
 
@@ -173,7 +175,7 @@ ssh pi@192.168.0.92
 
 ## Setting up the access point
 
-If you are using the setup script to configure the Raspberry Pi as an access point you do not need to complete the steps below. 
+If you are using the setup script to configure the Raspberry Pi as an access point you do not need to complete the steps below.
 
 ### Installing required packages
 
